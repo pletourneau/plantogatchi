@@ -1,55 +1,102 @@
-// const storeState = () => {
-//   let currentState = {};
-//   return (stateChangeFunction = (state) => state) => {
-//     const newState = stateChangeFunction(currentState);
-//     currentState = { ...newState };
-//     return newState;
-//   };
-// };
+// const canEat = function(creature) {
+//   const obj = {
+//     eat: function(food) {
+//       return `The ${creature} eats the ${food}.`
+//     }
+//   }
+//   return obj;
+// }
+// const cat = canEat("cat");
 
-// const stateControl = storeState();
+// First use closures to create three dance moves. For instance, a dancer should be able to do the following:
 
-// // This is a function factory.
-// // We can easily create more specific functions that
-// // alter a plant's soil, water, and light to varying degrees.
-// const changeState = (prop) => {
-//   return (value) => {
-//     return (state) => ({
-//       ...state,
-//       [prop]: (state[prop] || 0) + value,
-//     });
-//   };
-// };
+// > dancer.samba()
+// "The dancer sambas!"
+// > dancer.tango()
+// "The dancer tangos!"
 
-// // We create four functions using our function factory.
-// // We could easily create many more.
-// const feed = changeState("soil")(1);
-// const blueFood = changeState("soil")(5);
+const canPaint = function (color) {
+  return {
+    paints: function () {
+      return `Paints ${color}!`;
+    },
+  };
+};
+const painter1 = canPaint("green");
+const painter2 = canPaint("yellow");
+const painter3 = canPaint("red");
 
-// const hydrate = changeState("water")(1);
-// const superWater = changeState("water")(5);
+const sound = function (sound) {
+  return {
+    sound: function () {
+      return `${sound}!`;
+    },
+  };
+};
+const faucet = sound("Drip drip drip");
+const oldCar = sound("Grumble grumble");
+const sleepyBear = sound("Grrr... yawn");
 
-// window.onload = function () {
-//   // This function has side effects because we are manipulating the DOM.
-//   // Manipulating the DOM will always be a side effect.
-//   // Note that we only use one of our functions to alter soil.
-//   // You can easily add more.
-//   document.getElementById("feed").onclick = function () {
-//     const newState = stateControl(blueFood);
-//     document.getElementById("soil-value").innerText = `Soil: ${newState.soil}`;
-//   };
+function sendIt() {
+  return function (distance) {
+    return function (speed) {
+      return `The battle robot throws the spear ${distance} yards at ${speed} miles per hour!`;
+    };
+  };
+}
 
-//   // This function doesn't actually do anything useful in this application
-//   // — it just demonstrates how we can "look" at the current state
-//   // (which the DOM is holding anyway).
-//   // However, students often do need the ability to see the current state
-//   // without changing it so it's included here for reference.
-//   document.getElementById("show-state").onclick = function () {
-//     // We just need to call stateControl() without arguments
-//     // to see our current state.
-//     const currentState = stateControl();
-//     document.getElementById(
-//       "soil-value"
-//     ).innerText = `Soil: ${currentState.soil}`;
-//   };
-// };
+const battleRobot1 = sendIt();
+const throwResult = battleRobot1(100)(200);
+console.log(throwResult); // "The battle robot throws the spear 100 yards at 200 miles per hour!"
+
+function createDanceMove(move) {
+  return function () {
+    return `The dancer ${move}s!`;
+  };
+}
+
+const samba = createDanceMove("samba");
+const tango = createDanceMove("tango");
+const waltz = createDanceMove("waltz");
+
+const dancer = {
+  samba: samba,
+  tango: tango,
+  waltz: waltz,
+};
+
+const belowG = (n) => {
+  if (n >= 1000) {
+    return 0;
+  } else {
+    if (n % 3 === 0 || n % 5 === 0) {
+      return n + belowG(n + 1);
+    } else {
+      return belowG(n + 1);
+    }
+  }
+};
+const belowGr = (n, sum = 0) => {
+  if (n >= 1000) {
+    return sum;
+  } else {
+    if (n % 3 === 0 || n % 5 === 0) {
+      return belowGr(n + 1, sum + n);
+    } else {
+      return belowGr(n + 1, sum);
+    }
+  }
+};
+// https://projecteuler.net/problem=1
+
+const Fibo = (n, sum = 2, oldN) => {
+  if (n >= 4000000) {
+    return sum;
+  } else {
+    if (n % 2 === 0) {
+      return Fibo(n + oldN, sum + n, n);
+    } else {
+      return Fibo(n + oldN, sum, n);
+    }
+  }
+};
